@@ -21,7 +21,6 @@ def proxy(script, args):
     return run_script(env, script, args)
 
 def main():
-    print(sys.argv)
     proxy('rag.cli.main:main', sys.argv)
 
 # should this function even without poetry? we could load rag without it.
