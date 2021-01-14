@@ -1,12 +1,29 @@
 import sys
-import subprocess
+from pathlib import Path
+from poetry.factory import Factory
+from poetry.utils.env import EnvManager
+
+def run_script(env, script, args):
+    module, callable_ = script.split(":")
+    # src_in_sys_path = "sys.path.append('src'); " if self._module.is_in_src() else ""
+    cmd = ["python", "-c"]
+    cmd += [
+        "import sys; "
+        "from importlib import import_module; "
+        "sys.argv = {!r};"
+        "import_module('{}').{}()".format(args, module, callable_)
+    ]
+    return env.execute(*cmd)
+
+def proxy(script, args):
+    poetry = Factory().create_poetry(Path.cwd())
+    env = EnvManager(poetry).get()
+    return run_script(env, script, args)
 
 def main():
-    if len(sys.argv[1:]) == 0:
-        sys.argv.append('-h')
+    print(sys.argv)
+    proxy('rag.cli.main:main', sys.argv)
 
-    # check that we have poetry installed
-    # check that rag is installed in poetry env
-    # ragcli checks that we are in a rag project
-
-    subprocess.run(f'poetry run ragcli {" ".join(sys.argv[1:])}', shell=True)
+# should this function even without poetry? we could load rag without it.
+# check that we have poetry installed?
+# check that rag is installed in poetry env?
