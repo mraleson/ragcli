@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ragclip"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["Mark Raleson <markraleson@outlook.com>"]
 description = ""
 readme = "README.md"
